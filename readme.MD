@@ -3,7 +3,7 @@
 #### Rui La	
 ####11/9/2018
 
-The documentation is about training a TF object detection model on EC2 instance and export inference graph with and without frozne layers.
+The documentation is about training a TF object detection model on EC2 instance and export inference graph without frozne layers.
 
 First create an EC2 instance
 I created a ec2 instance using AWS deeplearning AMI and named it tf_od_installation
@@ -23,15 +23,16 @@ Tensorflow object detection API depends on following libraries but most of libra
 *   contextlib2
 *   cocoapi
 
+
 ## environment setup
 Type these commands line by line or you can use bash file in this repo.
 
 ```bash
 sudo su
-yum update && yes | yum upgrade 
+yum update 
+yum upgrade 
 pip install Cython
-yum install -y protobuf-compiler python-pil python-lxml
-yum install python-tk
+yum install -y protobuf-compiler python-pil python-lxml python-tk 
 mkdir -p tensorflow
 cd tensorflow
 # Download tensorflow models 
@@ -92,6 +93,7 @@ API by running the following command:
 sudo ./bin/protoc object_detection/protos/*.proto --python_out=.
 export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 python object_detection/builders/model_builder_test.py
+cd object_detection
 ```
 
 if you see "OK" at the end of running, that means the environment installation for Tensorflow API is ready
@@ -107,6 +109,7 @@ To export unfrozen inference graph, we need to download it and replace the origi
 sudo su
 mkdir training
 cd training
+# From tensforflow/models/research/object_detection/training/
 git clone https://github.com/larui529/tensorflow-object-detection-docker.git 
 cp tensorflow-object-detection-docker/training/* .
 cp tensorflow-object-detection-docker/exporter.py ../
@@ -116,7 +119,7 @@ exit
 Finally export unfrozen inference graph to output_directory. 
 
 ```bash
-# From tensorflow/models/research/
+# From tensorflow/models/research/object_detection/
 sudo chmod -R 777 ~/tensorflow/*
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-5736 --output_directory inference_graph
 ```
@@ -136,7 +139,7 @@ After export, you should see the directory inference_graph containing the follow
 ```
 inference_graph
       |-- checkpoint
-	  |-- frozen_inference_graph.pb
+	|-- frozen_inference_graph.pb
       |-- model.ckpt.data-00000-of-00001
       |-- model.ckpt.index
       |-- model.ckpt.meta
