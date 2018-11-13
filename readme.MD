@@ -28,9 +28,9 @@ Type these commands line by line or you can use bash file in this repo.
 
 ```bash
 sudo su
-yum update && yes | yum upgrade
+yum update && yes | yum upgrade 
 pip install Cython
-yum install-yprotobuf-compiler python-pil python-lxml
+yum install-y protobuf-compiler python-pil python-lxml
 yum install python-tk
 mkdir -p tensorflow/models
 cd tensorflow/models
