@@ -133,18 +133,18 @@ After export, you should see the directory inference_graph containing the follow
 * model.ckpt.*, the model checkpoints used for exporting
 * checkpoint, a file specifying to restore included checkpoint files
 * pipeline.config, pipeline config file for the exported model
-
-/inference_graph/
-      +-- checkpoint
-	  +-- frozen_inference_graph.pb
-      +-- model.ckpt.data-00000-of-00001
-      +-- model.ckpt.index
-      +-- model.ckpt.meta
-      +-- pipeline.config
-      +-- saved_model
-            +-- saved_model.pb
-            +-- variables
-                  +-- variables.data-00000-of-00001 
-                  +-- variables.index
-
+```
+inference_graph
+      |-- checkpoint
+	  |-- frozen_inference_graph.pb
+      |-- model.ckpt.data-00000-of-00001
+      |-- model.ckpt.index
+      |-- model.ckpt.meta
+      |-- pipeline.config
+      |-- saved_model
+            |-- saved_model.pb
+            |-- variables
+                  |-- variables.data-00000-of-00001 
+                  |-- variables.index
+```
 folder of saved_model should be in same structure as export_savedmodel from tensorflow estimator which should be able used for inference serving. 
