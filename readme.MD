@@ -139,7 +139,7 @@ After export, you should see the directory inference_graph containing the follow
 ```
 inference_graph
       |-- checkpoint
-	|-- frozen_inference_graph.pb
+      |-- frozen_inference_graph.pb
       |-- model.ckpt.data-00000-of-00001
       |-- model.ckpt.index
       |-- model.ckpt.meta
