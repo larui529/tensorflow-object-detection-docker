@@ -1,7 +1,8 @@
 # How to unfreeze and export tensorflow inference graph from object detection API using EC2 instance
 
-Rui La	
-11/9/2018
+#### Rui La	
+####11/9/2018
+
 The documentation is about training a TF object detection model on EC2 instance and export inference graph with and without frozne layers.
 
 First create an EC2 instance
@@ -22,6 +23,7 @@ Tensorflow object detection API depends on following libraries but most of libra
 *   contextlib2
 *   cocoapi
 
+## environment setup
 Type these commands line by line or you can use bash file in this repo.
 
 ```bash
@@ -79,7 +81,7 @@ to avoid running this manually, you can add it as a new line to the end of your
 tensorflow/models/research on your system.
 
 
-# Testing the Installation
+## Testing the Installation
 
 You can test that you have correctly installed the Tensorflow Object Detection\
 API by running the following command:
@@ -89,6 +91,7 @@ API by running the following command:
 python object_detection/builders/model_builder_test.py
 ```
 
+## Export unfrozen inference graph
 
 I have my trained checkpoint saved at [here](https://github.com/larui529/tensorflow-object-detection-docker)
 
