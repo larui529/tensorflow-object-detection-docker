@@ -30,13 +30,13 @@ Type these commands line by line or you can use bash file in this repo.
 sudo su
 yum update && yes | yum upgrade 
 pip install Cython
-yum install-y protobuf-compiler python-pil python-lxml
+yum install -y protobuf-compiler python-pil python-lxml
 yum install python-tk
-mkdir -p tensorflow/models
-cd tensorflow/models
+mkdir -p tensorflow
+cd tensorflow
 # Download tensorflow models 
 git clone https://github.com/tensorflow/models.git
-
+cd models/research
 ```
 
 
@@ -72,7 +72,7 @@ Now the environment is set up, we can exit sudo mode and then activate conda env
 ```bash
 # From tensorflow/models/research/
 exit
-conda activate tensorflow_p27
+source activate tensorflow_p27
 ```
 
 Note: This command needs to run from every new terminal you start. If you wish
@@ -86,10 +86,15 @@ tensorflow/models/research on your system.
 You can test that you have correctly installed the Tensorflow Object Detection\
 API by running the following command:
 
+
 ```bash
 # From tensorflow/models/research/
+sudo ./bin/protoc object_detection/protos/*.proto --python_out=.
+export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 python object_detection/builders/model_builder_test.py
 ```
+
+if you see "OK" at the end of running, that means the environment installation for Tensorflow API is ready
 
 ## Export unfrozen inference graph
 
@@ -99,19 +104,23 @@ To export unfrozen inference graph, we need to download it and replace the origi
 
 ```bash
 # From tensorflow/models/research/object_detection/
+sudo su
 mkdir training
 cd training
-git clone https://github.com/larui529/tensorflow-object-detection-docker.git .
-cp /exporter.py ../
-
+git clone https://github.com/larui529/tensorflow-object-detection-docker.git 
+cp tensorflow-object-detection-docker/training/* .
+cp tensorflow-object-detection-docker/exporter.py ../
+exit
 ```
 
 Finally export unfrozen inference graph to output_directory. 
 
 ```bash
 # From tensorflow/models/research/
-python object_detection/export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-5736 --output_directory inference_graph
+sudo chmod -R 777 ~/tensorflow/*
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-5736 --output_directory inference_graph
 ```
+
 
 NOTE: We are configuring our exported model to ingest 4-D image tensors. We can
 also configure the exported model to take encoded images or serialized
@@ -124,3 +133,18 @@ After export, you should see the directory inference_graph containing the follow
 * model.ckpt.*, the model checkpoints used for exporting
 * checkpoint, a file specifying to restore included checkpoint files
 * pipeline.config, pipeline config file for the exported model
+
+/inference_graph/
+      |-- checkpoint
+      |-- frozen_inference_graph.pb
+      |-- model.ckpt.data-00000-of-00001
+      |-- model.ckpt.index
+      |-- model.ckpt.meta
+      |-- pipeline.config
+      |-- saved_model
+            |-- saved_model.pb
+            |-- variables
+                  |-- variables.data-00000-of-00001 
+                  |-- variables.index
+
+folder of saved_model should be in same structure as export_savedmodel from tensorflow estimator which should be able used for inference serving. 
